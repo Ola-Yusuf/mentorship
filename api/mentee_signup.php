@@ -9,7 +9,7 @@
 
     $mentee = new Mentee();
     $mentee->selectDatabase();
-    
+
     $data = json_decode(file_get_contents("php://input"));
 
     $mentee->mentee_name = $data->name;
@@ -17,7 +17,9 @@
     $mentee->mentee_password = $data->password;
     $mentee->mentee_created = date('Y-m-d H:i:s');
     
-    if($mentee->createMentee()){
+    $createResponse = $mentee->createMentee();
+
+    if($createResponse === true){
         $mentee->closeDbConnection();
         http_response_code(200);
         $success['message'] = 'Mentee created successfully.';
@@ -26,6 +28,7 @@
         $mentee->closeDbConnection();
         http_response_code(422);
         $error['error'] = 'Unable to create Mentee could not be created.';
+        $error['message'] = $createResponse;
         echo json_encode($error); 
     }
 ?>

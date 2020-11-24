@@ -4,6 +4,7 @@ require_once './config/Db_connect.php';
 
         // Table
         private $db_table = "mentee";
+        Private $db_relation_table = "mentees_mentor";
 
         // Columns
         public $id;
@@ -11,6 +12,10 @@ require_once './config/Db_connect.php';
         public $mentee_email;
         public $mentee_password;
         public $created;
+
+        //relationship column
+        public $mentee_id;
+        public $mentor_id;
 
         const PASSWORD_DEFAULT = "MentorshipRecord";
 
@@ -23,7 +28,11 @@ require_once './config/Db_connect.php';
         // CREATE a new mentee
         public function createMentee(){
 
-            $sqlQuery = "INSERT INTO
+            try {
+                //Begin the transaction.
+                $this->conn->beginTransaction();
+
+                $sqlQuery = "INSERT INTO
                         ". $this->db_table ."
                     SET
                         mentee_name = :mentee_name, 
@@ -31,29 +40,58 @@ require_once './config/Db_connect.php';
                         mentee_password = :mentee_password, 
                         mentee_created = :mentee_created";
         
-            $stmt = $this->conn->prepare($sqlQuery);
-        
-            // sanitize
-            $this->mentee_name=htmlspecialchars(strip_tags($this->mentee_name));
-            $this->mentee_email=htmlspecialchars(strip_tags($this->mentee_email));
-            $this->mentee_password=htmlspecialchars(strip_tags($this->mentee_password));
-            $this->mentee_created=htmlspecialchars(strip_tags($this->mentee_created));
+                $stmt = $this->conn->prepare($sqlQuery);
+            
+                // sanitize
+                $this->mentee_name=htmlspecialchars(strip_tags($this->mentee_name));
+                $this->mentee_email=htmlspecialchars(strip_tags($this->mentee_email));
+                $this->mentee_password=htmlspecialchars(strip_tags($this->mentee_password));
+                $this->mentee_created=htmlspecialchars(strip_tags($this->mentee_created));
 
-            $hash = password_hash($this->mentee_password, PASSWORD_DEFAULT);
-        
-            // bind data
-            $stmt->bindParam(":mentee_name", $this->mentee_name);
-            $stmt->bindParam(":mentee_email", $this->mentee_email);
-            $stmt->bindParam(":mentee_password", $hash);
-            $stmt->bindParam(":mentee_created", $this->mentee_created);
-        
-            if($stmt->execute()){
-              $this->closeDbConnection();
-               return true;
+                $hash = password_hash($this->mentee_password, PASSWORD_DEFAULT);
+            
+                // bind data
+                $stmt->bindParam(":mentee_name", $this->mentee_name);
+                $stmt->bindParam(":mentee_email", $this->mentee_email);
+                $stmt->bindParam(":mentee_password", $hash);
+                $stmt->bindParam(":mentee_created", $this->mentee_created);
+
+                $stmt->execute();
+                $this->mentee_id = $this->conn->lastInsertId(); //last insertion id
+
+                //get mentors id
+                $sqlQueryMentor = "SELECT id FROM mentor";
+                $stmtMentor = $this->conn->prepare($sqlQueryMentor);
+                $stmtMentor ->execute();
+                $ids = $stmtMentor->fetchAll(PDO::FETCH_COLUMN);
+                $this->mentor_id = array_rand($ids);
+                while($this->mentor_id == 0){
+                    $this->mentor_id = array_rand($ids); 
+                }
+
+                $sqlQueryRelationship = "INSERT INTO
+                            ". $this->db_relation_table ."
+                                SET
+                                mentee_id = :mentee_id, 
+                                mentor_id = :mentor_id";
+            
+                $stmtRelationship = $this->conn->prepare($sqlQueryRelationship);
+
+                // bind data
+                $stmtRelationship->bindParam(":mentee_id", $this->mentee_id);
+                $stmtRelationship->bindParam(":mentor_id", $this->mentor_id);
+                $stmtRelationship->execute();
+
+                //Commit the transaction.
+                $this->conn->commit();
+                $this->closeDbConnection();
+                return true;
+            } catch (Exception $e) {
+                //Rollback the transaction.
+                $this->conn->rollBack();
+
+                return $e->getMessage();
             }
-            $this->closeDbConnection();
-
-            return false;
         }
 
         // GET a mentee data
