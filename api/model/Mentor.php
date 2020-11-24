@@ -21,16 +21,6 @@ require_once './config/Db_connect.php';
           $this->selectDatabase();
         }
 
-        // GET ALL Mentors
-        public function getAvailableMentorsId(){
-          $sqlQuery = "SELECT id FROM " . $this->db_table . "";
-          $stmt = $this->conn->prepare($sqlQuery);
-          $stmt->execute();
-          $this->closeDbConnection();
-          return $stmt;
-      }
-
-
         // CREATE a Mentor
         public function createMentor(){
 
