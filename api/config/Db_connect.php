@@ -14,14 +14,14 @@
                  $this->conn = new PDO("mysql:host=$this->server_name", $this->db_username, $this->db_password);
                  $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }catch(PDOException $e) {
-                echo $query . "<br>" . $e->getMessage();
+                echo  "<br>" . $e->getMessage();
               }
         }
 
         public function selectDatabase(){
             $dbname = "`".str_replace("`","``",$this->db_name)."`";
              $this->conn->query("use $dbname");
-             return $this->conn;
+            //  return $this->conn;
         }
 
         public function closeDbConnection(){
