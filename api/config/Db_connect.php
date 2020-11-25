@@ -10,7 +10,7 @@
 
         // Db connection
         public function __construct(){
-            $this->server_name = getenv("server", true) ? 'localhost' : getenv("server");
+            $this->server_name = getenv("server", false) ? 'localhost' : getenv("server");
             $this->db_username = getenv("username");
             $this->db_password = getenv("password");
             $this->db_name = getenv("name");
