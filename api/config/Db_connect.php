@@ -1,7 +1,6 @@
 <?php 
     class Db_connect {
-        private $production = true;
-        protected $db_url = null;
+        
         private $server_name =null;
         private $db_username =null; 
         private $db_password =null; 
@@ -11,7 +10,7 @@
 
         // Db connection
         public function __construct(){
-            $this->server_name = getenv("server");
+            $this->server_name = getenv("server", true) ? 'localhost' : getenv("server");
             $this->db_username = getenv("username");
             $this->db_password = getenv("password");
             $this->db_name = getenv("name");
