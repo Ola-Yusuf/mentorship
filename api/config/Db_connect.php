@@ -18,6 +18,11 @@
                 $this->db_password = $this->url["pass"];
                 $this->db_name = substr($this->url["path"], 1);
             }
+            echo $this->url;
+            echo $this->server_name ;
+            echo $this->db_username ;
+            echo $this->db_password ;
+            echo $this->db_name ;
 
             $this->conn = null;
             try {
