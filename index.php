@@ -6,7 +6,7 @@
   <title>Document</title>
 </head>
 <body>
-  <?php echo 'Thank you, working now...'; ?>
+  <?php echo '<a href="https://secure-reef-39872.herokuapp.com/api/config/database_setup.php">Thank you, working now...Click her to setup database </a>'; ?>
   <!-- <p></p> -->
 </body>
 </html>
