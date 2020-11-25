@@ -1,5 +1,6 @@
 <?php 
     class Db_connect {
+        private $production = false;
         private $server_name = "localhost";
         private $db_username = "root";
         private $db_password = "";
@@ -9,6 +10,13 @@
 
         // Db connection
         public function __construct(){
+            if($production){
+                $this->server_name = getenv('server_name');
+                $this->db_username = getenv('db_username');
+                $this->db_password = getenv('db_password');
+                $this->db_name = getenv('db_name');
+            }
+
             $this->conn = null;
             try {
                  $this->conn = new PDO("mysql:host=$this->server_name", $this->db_username, $this->db_password);
