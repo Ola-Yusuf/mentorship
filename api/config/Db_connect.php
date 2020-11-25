@@ -5,16 +5,18 @@
         private $db_username = "root";
         private $db_password = "";
         protected $db_name = "mentorship";
+        protected $url = null;
 
         public $conn;
 
         // Db connection
         public function __construct(){
             if($production){
-                $this->server_name = getenv('server_name');
-                $this->db_username = getenv('db_username');
-                $this->db_password = getenv('db_password');
-                $this->db_name = getenv('db_name');
+                $this->url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+                $this->server_name = $this->url["host"];
+                $this->db_username = $this->url["user"];
+                $this->db_password = $this->url["pass"];
+                $this->db_name = substr($this->url["path"], 1);
             }
 
             $this->conn = null;
