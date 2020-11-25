@@ -1,6 +1,6 @@
 <?php 
     class Db_connect {
-        private $production = false;
+        private $production = true;
         private $server_name = "localhost";
         private $db_username = "root";
         private $db_password = "";

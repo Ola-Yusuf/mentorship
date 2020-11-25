@@ -1,6 +1,6 @@
  class Api { 
   constructor() {
-    this.production = false;
+    this.production = true;
     if(this.production){
       this.api = "https://mentorshipapptest.herokuapp.com/api/"; //production api
     }else{
