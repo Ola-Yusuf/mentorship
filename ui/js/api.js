@@ -2,7 +2,7 @@
   constructor() {
     this.production = true;
     if(this.production){
-      this.api = "https://mentorshipapptest.herokuapp.com/api/"; //production api
+      this.api = "https://secure-reef-39872.herokuapp.com/api/"; //production api
     }else{
       this.api = "http://127.0.0.1:5000/api/"; //dev api
     }
