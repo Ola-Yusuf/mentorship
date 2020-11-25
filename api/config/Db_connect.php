@@ -12,11 +12,16 @@
         // Db connection
         public function __construct(){
             if($production){
-                $this->url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-                $this->server_name = $this->url["host"];
-                $this->db_username = $this->url["user"];
-                $this->db_password = $this->url["pass"];
-                $this->db_name = substr($this->url["path"], 1);
+                // $this->url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+                // $this->server_name = $this->url["host"];
+                // $this->db_username = $this->url["user"];
+                // $this->db_password = $this->url["pass"];
+                // $this->db_name = substr($this->url["path"], 1);
+
+                $this->server_name = getenv("server");
+                $this->db_username = getenv("username");
+                $this->db_password = getenv("password");
+                $this->db_name = getenv("name");
             }
             echo $this->url;
             echo $this->server_name ;
