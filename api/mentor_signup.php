@@ -17,15 +17,18 @@
     $mentor->mentor_password = $data->password;
     $mentor->mentor_created = date('Y-m-d H:i:s');
     
-    if($mentor->createMentor()){
+    $createMentorResponse = $mentor->createMentor();
+    if( $createMentorResponse === true){
         $mentor->closeDbConnection();
         http_response_code(201);
         $success['message'] = 'Mentor created successfully.';
         echo json_encode($success);
     } else{
         $mentor->closeDbConnection();
-        http_response_code(422);
-        $error['error'] =  'Unable to create Mentor.';
+        // http_response_code(422);
+        $error['status'] =  422; //unable to process
+        $error['error'] =  'Unable to create Mentor Or Mentee Already Exist.';
+        // $error['message'] =  $createMentorResponse;
         echo json_encode($error); 
     }
 ?>

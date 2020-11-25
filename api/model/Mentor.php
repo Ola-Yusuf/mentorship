@@ -24,7 +24,8 @@ require_once './config/Db_connect.php';
         // CREATE a Mentor
         public function createMentor(){
 
-            $sqlQuery = "INSERT INTO
+            try{
+              $sqlQuery = "INSERT INTO
                         ". $this->db_table ."
                     SET
                         mentor_name = :mentor_name, 
@@ -43,7 +44,6 @@ require_once './config/Db_connect.php';
             $hash = password_hash($this->mentor_password, PASSWORD_DEFAULT);
         
             // bind data
-            $stmt->bindParam(":mentee_id", $this->mentee_id);
             $stmt->bindParam(":mentor_name", $this->mentor_name);
             $stmt->bindParam(":mentor_email", $this->mentor_email);
             $stmt->bindParam(":mentor_password", $hash);
@@ -56,6 +56,11 @@ require_once './config/Db_connect.php';
             $this->closeDbConnection();
 
             return false;
+          }catch(Exception $e){
+          $this->closeDbConnection();
+
+          return $e->getMessage();
+          }
         }
 
         // GET a Mentor data

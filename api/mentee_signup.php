@@ -26,9 +26,10 @@
         echo json_encode($success); 
     } else{
         $mentee->closeDbConnection();
-        http_response_code(422);
-        $error['error'] = 'Unable to create Mentee could not be created.';
-        $error['message'] = $createResponse;
+        // http_response_code(422);
+        $error['status'] =  422; //unable to process
+        $error['error'] = 'Unable to create Mentee Or Mentee Already Exist.';
+        // $error['message'] = $createResponse;
         echo json_encode($error); 
     }
 ?>
