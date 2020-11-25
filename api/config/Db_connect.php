@@ -10,16 +10,11 @@
 
         // Db connection
         public function __construct(){
-            $this->server_name = getenv("server") != null ? getenv("server"):'localhost' ;
-            $this->db_username = getenv("username") != null ? getenv("username"):'root' ;
-            $this->db_password = getenv("password") != null ? getenv("password"):'' ;
-            $this->db_name = getenv("name") != null ? getenv("name"):'mentorship' ;
-
-            echo $this->server_name. "<br>" ;
-            echo $this->db_username. "<br>" ;
-            echo $this->db_password. "<br>" ;
-            echo $this->db_name. "<br>" ;
-            
+            $this->server_name = getenv("db_server") != null ? getenv("db_server"):'localhost' ;
+            $this->db_username = getenv("db_username") != null ? getenv("db_username"):'root' ;
+            $this->db_password = getenv("db_password") != null ? getenv("db_password"):'' ;
+            $this->db_name = getenv("db_name") != null ? getenv("db_name"):'mentorship' ;
+    
             $this->conn = null;
             try {
                  $this->conn = new PDO("mysql:host=$this->server_name", $this->db_username, $this->db_password);
