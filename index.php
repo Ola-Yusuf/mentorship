@@ -6,6 +6,7 @@
   <title>Document</title>
 </head>
 <body>
-  <p>Thank you, working now...</p>
+  <?php echo 'Thank you, working now...'; ?>
+  <!-- <p></p> -->
 </body>
 </html>
