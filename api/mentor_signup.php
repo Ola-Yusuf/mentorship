@@ -16,18 +16,23 @@
     $mentor->mentor_email = $data->email;
     $mentor->mentor_password = $data->password;
     $mentor->mentor_created = date('Y-m-d H:i:s');
-    
+
     $createMentorResponse = $mentor->createMentor();
-    if( $createMentorResponse === true){
+    if( $createMentorResponse['status'] === true){
         $mentor->closeDbConnection();
-        http_response_code(201);
+        unset($createMentorResponse['status']);
+        // http_response_code(201);
+        $success['status'] = 201;
         $success['message'] = 'Mentor created successfully.';
+        $success['category'] = 'mentor';
+        $success['profile'] = $createMentorResponse;
+        $success['token'] = true;
         echo json_encode($success);
     } else{
         $mentor->closeDbConnection();
         // http_response_code(422);
         $error['status'] =  422; //unable to process
-        $error['error'] =  'Unable to create Mentor Or Mentee Already Exist.';
+        $error['error'] =  'Unable to create Mentor Or Mentor Already Exist.';
         // $error['message'] =  $createMentorResponse;
         echo json_encode($error); 
     }
