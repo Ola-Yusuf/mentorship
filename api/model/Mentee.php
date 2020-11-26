@@ -17,7 +17,7 @@ require_once './config/Db_connect.php';
         public $mentee_id;
         public $mentor_id;
 
-        const PASSWORD_DEFAULT = "MentorshipRecord";
+        // const PASSWORD_DEFAULT = "MentorshipRecord";
 
         // Db connection
         public function __construct(){
@@ -49,7 +49,7 @@ require_once './config/Db_connect.php';
                 $this->mentee_created=htmlspecialchars(strip_tags($this->mentee_created));
 
                 $hash = password_hash($this->mentee_password, PASSWORD_DEFAULT);
-            
+                
                 // bind data
                 $stmt->bindParam(":mentee_name", $this->mentee_name);
                 $stmt->bindParam(":mentee_email", $this->mentee_email);
@@ -85,12 +85,15 @@ require_once './config/Db_connect.php';
                 //Commit the transaction.
                 $this->conn->commit();
                 $this->closeDbConnection();
-                return true;
+                $response['mentee_id'] = $this->mentee_id;
+                $response['status'] = true;
+                return $response;
             } catch (Exception $e) {
                 //Rollback the transaction.
                 $this->conn->rollBack();
-
-                return $e->getMessage();
+                $response['status'] = false;
+                $response['message'] = $e->getMessage();
+                return $response;
             }
         }
 
@@ -117,7 +120,7 @@ require_once './config/Db_connect.php';
             // $this->mentee_password = $dataRow['mentee_password'];
             $this->mentee_created = $dataRow['mentee_created'];
         }  
-        
+
     }
 ?>
 
