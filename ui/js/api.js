@@ -1,6 +1,6 @@
  class Api { 
   constructor() {
-    this.production = false;
+    this.production = production;
     if(this.production){
       this.api = "https://secure-reef-39872.herokuapp.com/api/"; //production api
     }else{
