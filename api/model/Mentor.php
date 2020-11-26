@@ -50,16 +50,24 @@ require_once './config/Db_connect.php';
             $stmt->bindParam(":mentor_created", $this->mentor_created);
         
             if($stmt->execute()){
+              // echo $stmt;
+              $insertedData['status'] = true;
+              $insertedData['name'] = $this->mentor_name;
+              $insertedData['email'] = $this->mentor_email;
+              $insertedData['created'] = $this->mentor_created;
               $this->closeDbConnection();
-               return true;
+              return $insertedData; //return inserted data
             }
             $this->closeDbConnection();
+            $insertedData['status'] = false;
 
-            return false;
+            return $insertedData;
           }catch(Exception $e){
           $this->closeDbConnection();
+          $insertedData['status'] = false;
+          $insertedData['error'] = $e->getMessage();
 
-          return $e->getMessage();
+          return $insertedData;
           }
         }
 
